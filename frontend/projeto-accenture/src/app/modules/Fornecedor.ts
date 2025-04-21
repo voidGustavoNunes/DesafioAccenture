@@ -3,7 +3,7 @@ import { Empresa } from "./Empresa";
 import { TipoPessoa } from "./enums/TipoPessoa";
 
 export class Fornecedor{
-  id?: ID;
+  id: ID;
   tipo: TipoPessoa;
   identificador: string;
   nome: string;

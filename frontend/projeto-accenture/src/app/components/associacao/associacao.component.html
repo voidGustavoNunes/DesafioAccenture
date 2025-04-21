@@ -1,0 +1,94 @@
+<div class="empresa-fornecedores">
+  <h3 class="mb-4">Fornecedores da Empresa</h3>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+    <button type="button" class="btn-close float-end" (click)="error = null"></button>
+  </div>
+
+  <div *ngIf="isParana" class="alert alert-info mb-3">
+    <i class="fas fa-info-circle me-2"></i>
+    Esta empresa está localizada no Paraná. Não é permitido associar fornecedores pessoa FISiCA menores de idade.
+  </div>
+
+  <!-- Associar novo fornecedor -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Associar Fornecedor</h5>
+      <div class="row g-3 align-items-end">
+        <div class="col-md-9">
+          <label for="fornecedor" class="form-label">Selecione um fornecedor</label>
+          <select
+            id="fornecedor"
+            [formControl]="fornecedorSelecionado"
+            class="form-select"
+            [disabled]="loading || allFornecedores.length === 0"
+          >
+            <option [ngValue]="null">Selecione...</option>
+            <option *ngFor="let fornecedor of allFornecedores" [ngValue]="fornecedor.id">
+              {{ fornecedor.nome }} ({{ getTipoPessoaLabel(fornecedor.tipo) }} - {{ fornecedor.identificador }})
+            </option>
+          </select>
+          <div *ngIf="allFornecedores.length === 0" class="form-text text-muted">
+            Não há fornecedores disponíveis para associação.
+          </div>
+        </div>
+        <div class="col-md-3">
+          <button
+            type="button"
+            class="btn btn-primary w-100"
+            [disabled]="!fornecedorSelecionado.value || loading"
+            (click)="associarFornecedor()"
+          >
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+            Associar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de fornecedores associados -->
+  <div *ngIf="loading && !empresa.fornecedores" class="text-center">
+    <app-loading></app-loading>
+  </div>
+
+  <div *ngIf="!loading && (!empresa.fornecedores || empresa.fornecedores.length === 0)" class="alert alert-info">
+    Esta empresa ainda não possui fornecedores associados.
+  </div>
+
+  <div *ngIf="empresa.fornecedores && empresa.fornecedores.length > 0" class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>CPF/CNPJ</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>CEP</th>
+          <th *ngIf="empresa.fornecedores[0].tipo === tipoPessoa.FISICA">RG</th>
+          <th *ngIf="empresa.fornecedores[0].tipo === tipoPessoa.FISICA">Data Nascimento</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fornecedor of empresa.fornecedores">
+          <td>{{ getTipoPessoaLabel(fornecedor.tipo) }}</td>
+          <td>{{ fornecedor.identificador }}</td>
+          <td>{{ fornecedor.nome }}</td>
+          <td>{{ fornecedor.email }}</td>
+          <td>{{ fornecedor.cep }}</td>
+          <td *ngIf="fornecedor.tipo === tipoPessoa.FISICA">{{ fornecedor.rg }}</td>
+          <td *ngIf="fornecedor.tipo === tipoPessoa.FISICA">
+            {{ fornecedor.dataNascimento | date:'dd/MM/yyyy' }}
+          </td>
+          <td>
+            <button class="btn btn-sm btn-danger" (click)="removerFornecedor(fornecedor.id)">
+              <i class="fas fa-trash-alt me-1"></i> Remover
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

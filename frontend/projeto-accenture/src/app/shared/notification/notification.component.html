@@ -1,0 +1,11 @@
+<div *ngIf="notificationService.notification$ | async as notification"
+     class="notification alert"
+     [ngClass]="{
+       'alert-success': notification.type === 'success',
+       'alert-danger': notification.type === 'error',
+       'alert-info': notification.type === 'info',
+       'alert-warning': notification.type === 'warning'
+     }">
+  {{ notification.message }}
+  <button type="button" class="btn-close" (click)="closeNotification()"></button>
+</div>

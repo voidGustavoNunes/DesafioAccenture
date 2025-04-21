@@ -1,0 +1,62 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="empresa-form">
+  <div class="mb-3">
+    <label for="cnpj" class="form-label">CNPJ*</label>
+    <input
+      type="text"
+      id="cnpj"
+      formControlName="cnpj"
+      class="form-control"
+      placeholder="00.000.000/0000-00"
+      [appCnpjMask]="true"
+    >
+    <div *ngIf="form.get('cnpj')?.invalid && form.get('cnpj')?.touched" class="text-danger">
+      <span *ngIf="form.get('cnpj')?.errors?.['required']">CNPJ é obrigatório</span>
+      <span *ngIf="form.get('cnpj')?.errors?.['invalidCnpj']">CNPJ inválido</span>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="nomeFantasia" class="form-label">Nome Fantasia*</label>
+    <input
+      type="text"
+      id="nomeFantasia"
+      formControlName="nomeFantasia"
+      class="form-control"
+      placeholder="Nome da empresa"
+    >
+    <div *ngIf="form.get('nomeFantasia')?.invalid && form.get('nomeFantasia')?.touched" class="text-danger">
+      <span *ngIf="form.get('nomeFantasia')?.errors?.['required']">Nome fantasia é obrigatório</span>
+      <span *ngIf="form.get('nomeFantasia')?.errors?.['minlength']">Nome deve ter pelo menos 3 caracteres</span>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="cep" class="form-label">CEP*</label>
+    <div class="input-group">
+      <input
+        type="text"
+        id="cep"
+        formControlName="cep"
+        class="form-control"
+        placeholder="00000-000"
+        appCepMask
+      >
+      <span *ngIf="validatingCep" class="input-group-text">
+        <i class="fas fa-spinner fa-spin"></i>
+      </span>
+    </div>
+    <div *ngIf="form.get('cep')?.invalid && form.get('cep')?.touched" class="text-danger">
+      <span *ngIf="form.get('cep')?.errors?.['required']">CEP é obrigatório</span>
+      <span *ngIf="form.get('cep')?.errors?.['invalidCep']">CEP inválido</span>
+      <span *ngIf="form.get('cep')?.errors?.['pattern']">CEP deve conter 8 dígitos</span>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">Cancelar</button>
+    <button type="submit" class="btn btn-primary" [disabled]="loading || form.invalid">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+      {{ empresa ? 'Atualizar' : 'Cadastrar' }}
+    </button>
+  </div>
+</form>
