@@ -6,12 +6,6 @@
     <button type="button" class="btn-close float-end" (click)="error = null"></button>
   </div>
 
-  <div *ngIf="isParana" class="alert alert-info mb-3">
-    <i class="fas fa-info-circle me-2"></i>
-    Esta empresa está localizada no Paraná. Não é permitido associar fornecedores pessoa FISiCA menores de idade.
-  </div>
-
-  <!-- Associar novo fornecedor -->
   <div class="card mb-4">
     <div class="card-body">
       <h5 class="card-title">Associar Fornecedor</h5>
@@ -48,7 +42,6 @@
     </div>
   </div>
 
-  <!-- Lista de fornecedores associados -->
   <div *ngIf="loading && !empresa.fornecedores" class="text-center">
     <app-loading></app-loading>
   </div>

@@ -1,0 +1,79 @@
+<div class="container mt-4">
+  <div *ngIf="loading" class="text-center">
+    <app-loading></app-loading>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+    <button type="button" class="btn-close float-end" (click)="error = null"></button>
+  </div>
+
+  <div *ngIf="empresa">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>{{ empresa.nomeFantasia }}</h2>
+      <div>
+        <button class="btn btn-warning me-2" (click)="editEmpresa()">
+          <i class="fas fa-edit me-1"></i> Editar
+        </button>
+        <button class="btn btn-danger" (click)="deleteEmpresa()">
+          <i class="fas fa-trash-alt me-1"></i> Excluir
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4">
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab === 'info'" (click)="setActiveTab('info')">
+          Informações Gerais
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab === 'fornecedores'" (click)="setActiveTab('fornecedores')">
+          Fornecedores
+        </a>
+      </li>
+    </ul>
+
+    <!-- Conteúdo das Tabs -->
+    <div [ngSwitch]="activeTab">
+      <!-- Tab Informações -->
+      <div *ngSwitchCase="'info'">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Dados da Empresa</h5>
+          </div>
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">CNPJ:</div>
+              <div class="col-md-9">{{ empresa.cnpj }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">Nome Fantasia:</div>
+              <div class="col-md-9">{{ empresa.nomeFantasia }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">CEP:</div>
+              <div class="col-md-9">{{ empresa.cep }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">Quantidade de Fornecedores:</div>
+              <div class="col-md-9">{{ empresa.fornecedores?.length || 0 }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Fornecedores -->
+      <div *ngSwitchCase="'fornecedores'">
+        <app-associacao [empresa]="empresa"></app-associacao>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <button class="btn btn-secondary" routerLink="/empresas">
+      <i class="fas fa-arrow-left me-1"></i> Voltar para listagem
+    </button>
+  </div>
+</div>

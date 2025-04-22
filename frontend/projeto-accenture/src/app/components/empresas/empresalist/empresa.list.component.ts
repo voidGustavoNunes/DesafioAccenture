@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ID } from '@datorama/akita';
 import { Empresa } from 'src/app/modules/Empresa';
 import { EmpresaService } from 'src/app/service/EmpresaService';
@@ -13,12 +13,15 @@ export class EmpresaListComponent implements OnInit {
   originalEmpresas: Empresa[] = [];
   loading = false;
   error: string | null = null;
+  @Output() editEmpresa = new EventEmitter<Empresa>();
+
 
   constructor(private empresaService: EmpresaService) {}
 
   ngOnInit(): void {
     this.loadEmpresas();
   }
+  
 
   loadEmpresas(): void {
     this.loading = true;

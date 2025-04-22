@@ -16,12 +16,26 @@ import { CepMaskDirective } from './components/directives/cep-mask.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NotificationComponent } from './shared/notification/notification.component';
 import { LoadingComponent } from './shared/loading/loading.component';
+import { EmpresaDetailComponent } from './components/empresas/empresadetail/empresa.detail.component';
+import { FornecedorDetailComponent } from './components/fornecedores/fornecedor.detail/fornecedor.detail.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 const routes : Routes = [
-  {path: '', redirectTo: '/home', pathMatch: 'full'},
-  {path: '**', redirectTo: '/home', pathMatch: 'full'},
+  { path: '', component: HomeComponent },
 
+  // Rotas de Empresa
+  { path: 'empresas', component: EmpresaListComponent },
+  { path: 'empresas/novo', component: EmpresaFormComponent },
+  { path: 'empresas/:id', component: EmpresaDetailComponent },
+  { path: 'empresas/:id/editar', component: EmpresaFormComponent },
+
+  { path: 'fornecedores', component: FornecedorListComponent },
+  { path: 'fornecedores/novo', component: FornecedorFormComponent },
+  { path: 'fornecedores/:id', component: FornecedorDetailComponent },
+  { path: 'fornecedores/:id/editar', component: FornecedorFormComponent },
+
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
@@ -39,12 +53,16 @@ const routes : Routes = [
     CepMaskDirective,
     NotificationComponent,
     LoadingComponent,
+    EmpresaDetailComponent,
+    FornecedorDetailComponent,
+
   ],
   imports: [
     FormsModule,
     BrowserModule,
     RouterModule.forRoot(routes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,134 @@
+<div class="container mt-4">
+  <div *ngIf="loading" class="text-center">
+    <app-loading></app-loading>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+    <button type="button" class="btn-close float-end" (click)="error = null"></button>
+  </div>
+
+  <div *ngIf="fornecedor">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>{{ fornecedor.nome }}</h2>
+      <div>
+        <button class="btn btn-warning me-2" (click)="editFornecedor()">
+          <i class="fas fa-edit me-1"></i> Editar
+        </button>
+        <button class="btn btn-danger" (click)="deleteFornecedor()">
+          <i class="fas fa-trash-alt me-1"></i> Excluir
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4">
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab === 'info'" (click)="setActiveTab('info')">
+          Informações Gerais
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab === 'empresas'" (click)="setActiveTab('empresas')">
+          Empresas Associadas
+        </a>
+      </li>
+    </ul>
+
+    <!-- Conteúdo das Tabs -->
+    <div [ngSwitch]="activeTab">
+      <!-- Tab Informações -->
+      <div *ngSwitchCase="'info'">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Dados do Fornecedor</h5>
+          </div>
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">Tipo:</div>
+              <div class="col-md-9">{{ getTipoPessoaLabel(fornecedor.tipo) }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">{{ fornecedor.tipo === tipoPessoa.FISICA ? 'CPF' : 'CNPJ' }}:</div>
+              <div class="col-md-9">{{ fornecedor.identificador }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">Nome:</div>
+              <div class="col-md-9">{{ fornecedor.nome }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">E-mail:</div>
+              <div class="col-md-9">{{ fornecedor.email }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">CEP:</div>
+              <div class="col-md-9">{{ fornecedor.cep }}</div>
+            </div>
+
+            <!-- Campos específicos para pessoa física -->
+            <ng-container *ngIf="fornecedor.tipo === tipoPessoa.FISICA">
+              <div class="row mb-3">
+                <div class="col-md-3 fw-bold">RG:</div>
+                <div class="col-md-9">{{ fornecedor.rg || '-' }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Data de Nascimento:</div>
+                <div class="col-md-9">{{ formatDate(fornecedor.dataNascimento || null) }}</div>
+              </div>
+            </ng-container>
+
+            <div class="row mb-3">
+              <div class="col-md-3 fw-bold">Quantidade de Empresas:</div>
+              <div class="col-md-9">{{ fornecedor.empresas?.length || 0 }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Empresas -->
+      <div *ngSwitchCase="'empresas'">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Empresas Associadas</h5>
+          </div>
+          <div class="card-body">
+            <div *ngIf="!fornecedor.empresas || fornecedor.empresas.length === 0" class="alert alert-info">
+              Este fornecedor ainda não está associado a nenhuma empresa.
+            </div>
+
+            <div *ngIf="fornecedor.empresas && fornecedor.empresas.length > 0" class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                  <tr>
+                    <th>CNPJ</th>
+                    <th>Nome Fantasia</th>
+                    <th>CEP</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let empresa of fornecedor.empresas">
+                    <td>{{ empresa.cnpj }}</td>
+                    <td>{{ empresa.nomeFantasia }}</td>
+                    <td>{{ empresa.cep }}</td>
+                    <td>
+                      <a [routerLink]="['/empresas', empresa.id]" class="btn btn-sm btn-info">
+                        <i class="fas fa-eye me-1"></i> Detalhes
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <button class="btn btn-secondary" routerLink="/fornecedores">
+      <i class="fas fa-arrow-left me-1"></i> Voltar para listagem
+    </button>
+  </div>
+</div>

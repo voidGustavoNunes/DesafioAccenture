@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ID } from '@datorama/akita';
 import { TipoPessoa } from 'src/app/modules/enums/TipoPessoa';
 import { Fornecedor } from 'src/app/modules/Fornecedor';
 import { FornecedorService } from 'src/app/service/FornecedorService';
@@ -12,6 +13,9 @@ import { NotificationService } from 'src/app/service/NotificationService';
   styleUrls: ['./fornecedor.list.component.scss']
 })
 export class FornecedorListComponent implements OnInit {
+
+  @Output() editFornecedor = new EventEmitter<Fornecedor>();
+
   fornecedores: (Fornecedor & { editMode?: boolean, originalValue?: Fornecedor })[] = [];
   filteredFornecedores: (Fornecedor & { editMode?: boolean })[] = [];
   loading = false;
@@ -139,7 +143,7 @@ export class FornecedorListComponent implements OnInit {
     });
   }
 
-  deleteFornecedor(id: number): void {
+  deleteFornecedor(id: ID): void {
     if (confirm('Tem certeza que deseja excluir este fornecedor?')) {
       this.loadingService.show();
       this.fornecedorService.delete(id).subscribe({
