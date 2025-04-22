@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AssociacaoComponent } from './components/associacao/associacao.component';
 import { BoasVindasComponent } from './components/boas-vindas/boas-vindas.component';
@@ -18,7 +19,9 @@ import { FornecedorFormComponent } from './components/fornecedores/fornecedorfor
 import { FornecedorListComponent } from './components/fornecedores/fornecedorlist/fornecedor.list.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { NotificationComponent } from './shared/notification/notification.component';
-import { ToasterComponent } from './shared/toaster/toaster.component';
+import { CommonModule } from '@angular/common';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 
 const routes : Routes = [
@@ -44,7 +47,6 @@ const routes : Routes = [
     AppComponent,
     EmpresaListComponent,
     FornecedorListComponent,
-    ToasterComponent,
     EmpresaFormComponent,
     FornecedorFormComponent,
     AssociacaoComponent,
@@ -63,9 +65,14 @@ const routes : Routes = [
     BrowserModule,
     RouterModule.forRoot(routes),
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    CommonModule,
+    ToastModule,
   ],
-  providers: [],
+  providers: [
+    MessageService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

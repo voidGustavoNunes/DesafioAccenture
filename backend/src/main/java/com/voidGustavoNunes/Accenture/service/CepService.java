@@ -9,13 +9,23 @@ import com.voidGustavoNunes.Accenture.model.dto.CepDTO;
 @Service
 public class CepService {
     private final RestTemplate restTemplate = new RestTemplate();
-    private static final String CEP_API_URL = "http://cep.la/";
     
-    public CepDTO validateCep(String cep) {
+    public CepDTO validaCep(String cep) {
         try {
-            return restTemplate.getForObject(CEP_API_URL + cep, CepDTO.class);
+            String cepSemMascara = cep.replaceAll("[^\\d]", "");
+            String url = "https://viacep.com.br/ws/" + cepSemMascara + "/json/";
+            CepDTO response = restTemplate.getForObject(url, CepDTO.class);
+    
+            if (response == null || response.getCep() == null) {
+                throw new IllegalArgumentException("CEP inválido ou não encontrado: " + cep);
+            }
+    
+            return response;
+    
         } catch (RestClientException e) {
-            return null; 
+            throw new IllegalArgumentException("Erro ao consultar o CEP: " + cep);
         }
     }
+
+
 }

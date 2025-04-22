@@ -20,7 +20,7 @@
           >
             <option [ngValue]="null">Selecione...</option>
             <option *ngFor="let fornecedor of allFornecedores" [ngValue]="fornecedor.id">
-              {{ fornecedor.nome }} ({{ getTipoPessoaLabel(fornecedor.tipo) }} - {{ fornecedor.identificador }})
+              {{ fornecedor.nome }} ({{ getTipoPessoaLabel(fornecedor.tipo) }} - {{ formatarIdentificador(fornecedor.identificador) }})
             </option>
           </select>
           <div *ngIf="allFornecedores.length === 0" class="form-text text-muted">
@@ -67,10 +67,10 @@
       <tbody>
         <tr *ngFor="let fornecedor of empresa.fornecedores">
           <td>{{ getTipoPessoaLabel(fornecedor.tipo) }}</td>
-          <td>{{ fornecedor.identificador }}</td>
+          <td>{{ formatarIdentificador(fornecedor.identificador) }}</td>
           <td>{{ fornecedor.nome }}</td>
           <td>{{ fornecedor.email }}</td>
-          <td>{{ fornecedor.cep }}</td>
+          <td>{{ formatarCep(fornecedor.cep) }}</td>
           <td *ngIf="fornecedor.tipo === tipoPessoa.FISICA">{{ fornecedor.rg }}</td>
           <td *ngIf="fornecedor.tipo === tipoPessoa.FISICA">
             {{ fornecedor.dataNascimento | date:'dd/MM/yyyy' }}

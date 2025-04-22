@@ -53,10 +53,11 @@
   </div>
 
   <div class="d-flex justify-content-end">
-    <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">Cancelar</button>
+    <button type="button" class="btn btn-secondary me-2" (click)="form.reset()">Limpar</button>
     <button type="submit" class="btn btn-primary" [disabled]="loading || form.invalid">
       <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-      {{ empresa ? 'Atualizar' : 'Cadastrar' }}
+      {{ form.get('id')?.value ? 'Atualizar' : 'Cadastrar' }}
     </button>
   </div>
+
 </form>

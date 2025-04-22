@@ -18,11 +18,11 @@ public class CepController {
 
     @GetMapping("/{cep}")
     public ResponseEntity<?> validateCep(@PathVariable String cep) {
-        CepDTO response = cepService.validateCep(cep);
+        CepDTO response = cepService.validaCep(cep);
         if (response != null) {
             return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.badRequest().body("CEP inválido");
+            return ResponseEntity.badRequest().body("CEP invalido");
         }
     }
 }

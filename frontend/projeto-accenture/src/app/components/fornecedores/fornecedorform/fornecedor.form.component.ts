@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Cep } from 'src/app/modules/Cep';
-import { TipoPessoa } from 'src/app/modules/enums/TipoPessoa';
-import { Fornecedor } from 'src/app/modules/Fornecedor';
+import { finalize } from 'rxjs/operators';
+
 import { CepService } from 'src/app/service/CepService';
+import { FornecedorService } from 'src/app/service/FornecedorService';
+import { NotificationService } from 'src/app/service/NotificationService';
 import { CEPValidator } from 'src/app/shared/validators/CepValidator';
 import { CNPJValidator } from 'src/app/shared/validators/CnpjValidator';
 import { CPFValidator } from 'src/app/shared/validators/CpfValidator';
@@ -14,36 +15,31 @@ import { CPFValidator } from 'src/app/shared/validators/CpfValidator';
   styleUrls: ['./fornecedor.form.component.scss']
 })
 export class FornecedorFormComponent implements OnInit {
-  @Input() fornecedor: Fornecedor | null = null;
-  @Output() save = new EventEmitter<Fornecedor>();
-  @Output() cancel = new EventEmitter<void>();
 
   form!: FormGroup;
   loading = false;
   validatingCep = false;
-  cepInfo: Cep | null = null;
-  tipoPessoa = TipoPessoa;
+  cepInfo: any = null;
+  tipoPessoa = {
+    FISICA: 'FISICA',
+    JURIDICA: 'JURIDICA'
+  };
 
   constructor(
     private fb: FormBuilder,
-    private cepService: CepService
+    private cepService: CepService,
+    private fornecedorService: FornecedorService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
-    if (this.fornecedor) {
-      this.form.patchValue(this.fornecedor);
-      // Se for edição, validar o CEP novamente para carregar os dados
-      if (this.fornecedor.cep) {
-        this.validateCep(this.fornecedor.cep);
-      }
-    }
   }
 
   initForm(): void {
     this.form = this.fb.group({
       id: [null],
-      tipo: [TipoPessoa.JURIDICA, [Validators.required]],
+      tipo: [this.tipoPessoa.JURIDICA, [Validators.required]],
       identificador: ['', [Validators.required]],
       nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
@@ -52,34 +48,31 @@ export class FornecedorFormComponent implements OnInit {
       dataNascimento: [null]
     });
 
-    // Monitora mudanças no tipo de pessoa para ajustar validações
+    // Monitora mudanças no tipo de pessoa
     this.form.get('tipo')?.valueChanges.subscribe(tipo => {
       this.updateValidators(tipo);
     });
 
-    // Validação assíncrona para o CEP
+    // Validação do CEP
     this.form.get('cep')?.valueChanges.subscribe(cep => {
       if (cep && cep.length === 8) {
         this.validateCep(cep);
       }
     });
 
-    // Inicializa validadores com base no tipo inicial
     this.updateValidators(this.form.get('tipo')?.value);
   }
 
-  updateValidators(tipo: TipoPessoa): void {
+  updateValidators(tipo: string): void {
     const identificadorControl = this.form.get('identificador');
     const rgControl = this.form.get('rg');
     const dataNascimentoControl = this.form.get('dataNascimento');
 
-    if (tipo === TipoPessoa.FISICA) {
-      identificadorControl?.clearValidators();
+    if (tipo === this.tipoPessoa.FISICA) {
       identificadorControl?.setValidators([Validators.required, CPFValidator.validate]);
       rgControl?.setValidators([Validators.required]);
       dataNascimentoControl?.setValidators([Validators.required]);
     } else {
-      identificadorControl?.clearValidators();
       identificadorControl?.setValidators([Validators.required, CNPJValidator.validate]);
       rgControl?.clearValidators();
       dataNascimentoControl?.clearValidators();
@@ -111,18 +104,35 @@ export class FornecedorFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.form.valid) {
-      const fornecedor: Fornecedor = this.form.value;
-      this.save.emit(fornecedor);
-    } else {
-      // Marca todos os campos como touched para mostrar os erros
+    if (this.form.invalid) {
       Object.keys(this.form.controls).forEach(key => {
         this.form.get(key)?.markAsTouched();
       });
+      return;
     }
-  }
 
-  onCancel(): void {
-    this.cancel.emit();
+    this.loading = true;
+    const fornecedor = this.form.value;
+
+    const operation = fornecedor.id
+      ? this.fornecedorService.update(fornecedor.id, fornecedor)
+      : this.fornecedorService.create(fornecedor);
+
+    operation.pipe(
+      finalize(() => this.loading = false)
+    ).subscribe({
+      next: () => {
+        this.notificationService.success(fornecedor.id ? 'Fornecedor atualizado!' : 'Fornecedor cadastrado!');
+        if (!fornecedor.id) {
+          this.form.reset({
+            tipo: this.tipoPessoa.JURIDICA
+          });
+          this.cepInfo = null;
+        }
+      },
+      error: (err) => {
+        this.notificationService.error('Erro ao salvar fornecedor');
+      }
+    });
   }
 }

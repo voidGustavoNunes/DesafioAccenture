@@ -1,7 +1,11 @@
 package com.voidGustavoNunes.Accenture.model;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,4 +59,16 @@ public class Empresa extends GenericModel{
         fornecedor.getEmpresas().remove(this);
     }
     
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Empresa empresa = (Empresa) o;
+        return Objects.equals(id, empresa.id);
+    }
 }

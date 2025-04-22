@@ -178,19 +178,14 @@
   </ng-container>
 
   <div class="d-flex justify-content-end">
-    <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">
-      Cancelar
+    <button type="button" class="btn btn-secondary me-2" (click)="form.reset({ tipo: tipoPessoa.JURIDICA })">
+      Limpar
     </button>
-    <button
-      type="submit"
-      class="btn btn-primary"
-      [disabled]="loading || form.invalid"
-    >
-      <span
-        *ngIf="loading"
-        class="spinner-border spinner-border-sm me-1"
-      ></span>
-      {{ fornecedor ? "Atualizar" : "Cadastrar" }}
+    <button type="submit" class="btn btn-primary" [disabled]="loading || form.invalid">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+      {{ form.get('id')?.value ? 'Atualizar' : 'Cadastrar' }}
     </button>
   </div>
+
+  <p-toast></p-toast>
 </form>

@@ -2,8 +2,11 @@ package com.voidGustavoNunes.Accenture.model;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.voidGustavoNunes.Accenture.model.enums.TipoPessoa;
 
 import jakarta.persistence.Column;
@@ -49,12 +52,19 @@ public class Fornecedor extends GenericModel{
     @Pattern(regexp = "\\d{8}", message = "O CEP deve conter 8 dígitos numéricos")
     private String cep;
     
-    private String rg;
-    
-    private LocalDate dataNascimento;
-    
     @ManyToMany(mappedBy = "fornecedores")
     private Set<Empresa> empresas = new HashSet<>();
     
-    
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Fornecedor that = (Fornecedor) o;
+        return Objects.equals(id, that.id);
+    }
 }

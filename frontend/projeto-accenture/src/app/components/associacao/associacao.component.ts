@@ -35,7 +35,6 @@ export class AssociacaoComponent implements OnInit{
     this.loading = true;
     this.fornecedorService.getList().subscribe({
       next: (data) => {
-        // Filtrar fornecedores que já estão associados à empresa
         const fornecedoresIds = this.empresa.fornecedores?.map(f => f.id) || [];
         this.allFornecedores = data.filter(f => !fornecedoresIds.includes(f.id));
         this.loading = false;
@@ -53,61 +52,73 @@ export class AssociacaoComponent implements OnInit{
       const fornecedorId = this.fornecedorSelecionado.value;
       this.loading = true;
 
-      // Buscar o fornecedor da lista
-      const fornecedor = this.allFornecedores.find(f => f.id === fornecedorId);
-      if (fornecedor) {
-        // Adicionar à lista de fornecedores da empresa
-        if (!this.empresa.fornecedores) {
-          this.empresa.fornecedores = [];
+      this.empresaService.associarFornecedor(this.empresa.id, fornecedorId).subscribe({
+        next: (empresaAtualizada) => {
+          this.empresa = empresaAtualizada;
+          this.allFornecedores = this.allFornecedores.filter(f => f.id !== fornecedorId);
+          this.fornecedorSelecionado.reset();
+          this.loading = false;
+        },
+        error: (err) => {
+          this.error = 'Erro ao associar fornecedor';
+          this.loading = false;
+          console.error(err);
         }
-        this.empresa.fornecedores.push(fornecedor);
-
-        // Atualizar a empresa no backend
-        this.empresaService.update(this.empresa.id, this.empresa).subscribe({
-          next: () => {
-            // Remover o fornecedor da lista de disponíveis
-            this.allFornecedores = this.allFornecedores.filter(f => f.id !== fornecedorId);
-            this.fornecedorSelecionado.reset();
-            this.loading = false;
-          },
-          error: (err) => {
-            this.error = 'Erro ao associar fornecedor';
-            this.loading = false;
-            console.error(err);
-          }
-        });
-      }
+      });
     }
   }
 
   removerFornecedor(fornecedorId: ID): void {
     if (confirm('Tem certeza que deseja remover este fornecedor da empresa?')) {
-      // Remover o fornecedor da lista de fornecedores da empresa
-      if (this.empresa.fornecedores) {
-        const fornecedor = this.empresa.fornecedores.find(f => f.id === fornecedorId);
-        this.empresa.fornecedores = this.empresa.fornecedores.filter(f => f.id !== fornecedorId);
+      this.loading = true;
 
-        // Atualizar a empresa no backend
-        this.empresaService.update(this.empresa.id, this.empresa).subscribe({
-          next: () => {
-            // Adicionar o fornecedor de volta à lista de disponíveis, se existir
-            if (fornecedor) {
-              this.allFornecedores.push(fornecedor);
-              // Ordenar por nome para melhor usabilidade
-              this.allFornecedores.sort((a, b) => a.nome.localeCompare(b.nome));
-            }
-          },
-          error: (err) => {
-            this.error = 'Erro ao remover fornecedor';
-            console.error(err);
-          }
-        });
-      }
+      this.empresaService.removerFornecedor(this.empresa.id, fornecedorId).subscribe({
+        next: (empresaAtualizada) => {
+          this.empresa = empresaAtualizada;
+          this.loadFornecedores();
+          this.loading = false;
+        },
+        error: (err) => {
+          this.error = 'Erro ao remover fornecedor';
+          this.loading = false;
+          console.error(err);
+        }
+      });
     }
   }
 
   getTipoPessoaLabel(tipo: TipoPessoa): string {
     return tipo === TipoPessoa.FISICA ? 'FISICA' : 'JURIDICA';
+  }
+
+  formatarIdentificador(identificador: string): string {
+    if (!identificador) return '';
+
+    const digits = identificador.replace(/\D/g, '');
+
+    //cpf
+    if (digits.length === 11) {
+      return digits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    }
+
+    //cnpj
+    if (digits.length === 14) {
+      return digits.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+    }
+
+    return identificador;
+  }
+
+  formatarCep(cep: string): string {
+    if (!cep) return '';
+
+    const digits = cep.replace(/\D/g, '');
+
+    if (digits.length === 8) {
+      return digits.replace(/(\d{5})(\d{3})/, '$1-$2');
+    }
+
+    return cep;
   }
 }
 
