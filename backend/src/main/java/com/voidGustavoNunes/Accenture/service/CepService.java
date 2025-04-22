@@ -1,10 +1,12 @@
 package com.voidGustavoNunes.Accenture.service;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.voidGustavoNunes.Accenture.model.dto.CepDTO;
 
+@Service
 public class CepService {
     private final RestTemplate restTemplate = new RestTemplate();
     private static final String CEP_API_URL = "http://cep.la/";
