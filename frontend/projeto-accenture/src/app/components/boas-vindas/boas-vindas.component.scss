@@ -1,0 +1,17 @@
+.tech-box {
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    background-color: lighten(#A100FF, 40%);
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+  }
+
+  h5 {
+    margin-top: 0.5rem;
+  }
+}
