@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'projeto-accenture';
+  currentDate = new Date(2025, 3, 22);
+
+
 }

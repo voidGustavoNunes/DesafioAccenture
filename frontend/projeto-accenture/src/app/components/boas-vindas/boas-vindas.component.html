@@ -1,0 +1,85 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card shadow-lg border-0">
+        <div class="card-body p-5">
+          <div class="text-center mb-4">
+            <img src="./././assets/accenturelogo.png" alt="Accenture Logo" height="60" class="mb-3" />
+            <h1 class="display-5 fw-bold" style="color: #A100FF;">Sistema de Gestão de Empresas e Fornecedores</h1>
+            <p class="lead text-muted">Versão 1.0.0 | Última atualização: {{ currentDate | date:'dd/MM/yyyy' }}</p>
+          </div>
+
+          <div class="row g-4 mt-3">
+            <div class="col-md-6">
+              <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                  <h3 class="mb-3" style="color: #A100FF;"><i class="fas fa-info-circle me-2"></i>Sobre o Projeto</h3>
+                  <p>Este sistema foi desenvolvido utilizando Spring Boot no backend e Angular no frontend, com o objetivo de cumprir o desafio de desenvolvedor full stack Accenture.</p>
+                  <p>O sistema permite o cadastro completo de empresas (pessoas jurídicas) e fornecedores (pessoas físicas ou jurídicas), oferecendo funcionalidades de criação, edição, exclusão e associação entre entidades, além de utilizar consulta via API por CEP.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                  <h3 class="mb-3" style="color: #A100FF;"><i class="fas fa-cogs me-2"></i>Funcionalidades</h3>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item border-0 ps-0"><i class="fas fa-check-circle me-2" style="color: #A100FF;"></i>Cadastro completo de empresas</li>
+                    <li class="list-group-item border-0 ps-0"><i class="fas fa-check-circle me-2" style="color: #A100FF;"></i>Cadastro de fornecedores (PF e PJ)</li>
+                    <li class="list-group-item border-0 ps-0"><i class="fas fa-check-circle me-2" style="color: #A100FF;"></i>Validação automática de documentos (CPF, CNPJ)</li>
+                    <li class="list-group-item border-0 ps-0"><i class="fas fa-check-circle me-2" style="color: #A100FF;"></i>Consulta automática de endereços via CEP</li>
+                    <li class="list-group-item border-0 ps-0"><i class="fas fa-check-circle me-2" style="color: #A100FF;"></i>Gerenciamento de associações</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 mt-4">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <h3 class="mb-3" style="color: #A100FF;"><i class="fas fa-code me-2"></i>Tecnologias Utilizadas</h3>
+                  <div class="row text-center g-3">
+                    <div class="col-md-3 col-6">
+                      <div class="p-3 rounded" style="background-color: #f8f9fa;">
+                        <i class="fab fa-angular fa-2x mb-2" style="color: #dd0031;"></i>
+                        <h5>Angular</h5>
+                      </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                      <div class="p-3 rounded" style="background-color: #f8f9fa;">
+                        <i class="fab fa-java fa-2x mb-2" style="color: #007396;"></i>
+                        <h5>Spring Boot</h5>
+                      </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                      <div class="p-3 rounded" style="background-color: #f8f9fa;">
+                        <i class="fas fa-database fa-2x mb-2" style="color: #4479a1;"></i>
+                        <h5>H2 DATABASE</h5>
+                      </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                      <div class="p-3 rounded" style="background-color: #f8f9fa;">
+                        <i class="fab fa-bootstrap fa-2x mb-2" style="color: #7952b3;"></i>
+                        <h5>Bootstrap</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center mt-5">
+            <p>Para começar, clique abaixo:</p>
+            <div class="d-flex justify-content-center gap-3 mt-4">
+              <h1 routerLink="/home" class="btn btn-lg px-4" style="background-color: #A100FF; color: white;">
+                <i class="fas fa-building me-2"></i>Início
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
