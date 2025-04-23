@@ -52,12 +52,10 @@ export class FornecedorFormComponent implements OnInit {
       dataNascimento: [null]
     });
 
-    // Monitora mudanças no tipo de pessoa
     this.form.get('tipo')?.valueChanges.subscribe(tipo => {
       this.updateValidators(tipo);
     });
 
-    // Validação do CEP
     this.form.get('cep')?.valueChanges.subscribe(cep => {
       if (cep && cep.length === 8) {
         this.validateCep(cep);
@@ -110,13 +108,32 @@ export class FornecedorFormComponent implements OnInit {
     }
   }
 
-  validateCep(cep: string): void {
+  validateCep(cep: string): void { //verifica se e do parana e se e menor de idade
     this.validatingCep = true;
     this.cepService.validate(cep).subscribe({
       next: (result) => {
         this.validatingCep = false;
         if (result && result.address) {
           this.cepInfo = result;
+
+          if (result.state === 'PR' && this.form.get('tipo')?.value === this.tipoPessoa.FISICA) {
+            const dataNascimento = this.form.get('dataNascimento')?.value;
+            if (dataNascimento) {
+              const hoje = new Date();
+              const nascimento = new Date(dataNascimento);
+              let idade = hoje.getFullYear() - nascimento.getFullYear();
+              const m = hoje.getMonth() - nascimento.getMonth();
+
+              if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
+                idade--;
+              }
+
+              if (idade < 18) {
+                this.form.get('dataNascimento')?.setErrors({ menorIdadeParana: true });
+                this.notificationService.warning('Não é permitido cadastrar fornecedor pessoa física menor de idade no Paraná');
+              }
+            }
+          }
         } else {
           this.form.get('cep')?.setErrors({ invalidCep: true });
           this.cepInfo = null;
@@ -125,16 +142,39 @@ export class FornecedorFormComponent implements OnInit {
       error: () => {
         this.validatingCep = false;
         this.form.get('cep')?.setErrors({ invalidCep: true });
-        this.cepInfo = null; 
+        this.cepInfo = null;
       }
     });
   }
+
   onSubmit(): void {
     if (this.form.invalid) {
       Object.keys(this.form.controls).forEach(key => {
         this.form.get(key)?.markAsTouched();
       });
       return;
+    }
+
+    if (this.form.get('tipo')?.value === this.tipoPessoa.FISICA &&
+        this.cepInfo && this.cepInfo.state === 'PR') {
+
+      const dataNascimento = this.form.get('dataNascimento')?.value;
+      if (dataNascimento) {
+        const hoje = new Date();
+        const nascimento = new Date(dataNascimento);
+        let idade = hoje.getFullYear() - nascimento.getFullYear();
+        const m = hoje.getMonth() - nascimento.getMonth();
+
+        if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
+          idade--;
+        }
+
+        if (idade < 18) {
+          this.form.get('dataNascimento')?.setErrors({ menorIdadeParana: true });
+          this.notificationService.error('Não é permitido cadastrar fornecedor pessoa física menor de idade no Paraná');
+          return;
+        }
+      }
     }
 
     this.loading = true;
@@ -151,11 +191,11 @@ export class FornecedorFormComponent implements OnInit {
         this.notificationService.success(
           fornecedor.id ? 'Fornecedor atualizado com sucesso!' : 'Fornecedor cadastrado com sucesso!'
         );
-        // Redireciona para a lista de fornecedores após sucesso
         this.router.navigate(['/fornecedores']);
       },
       error: (err) => {
-        this.notificationService.error('Erro ao salvar fornecedor');
+        const errorMessage = err.error?.message || 'Erro ao salvar fornecedor';
+        this.notificationService.error(errorMessage);
       }
     });
   }

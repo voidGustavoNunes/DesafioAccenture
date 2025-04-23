@@ -25,5 +25,8 @@ public interface FornecedorRepository extends JpaRepository<Fornecedor, Long>{
            "(:nome IS NULL OR LOWER(f.nome) LIKE LOWER(CONCAT('%', :nome, '%'))) AND " +
            "(:identificador IS NULL OR f.identificador LIKE CONCAT('%', :identificador, '%'))")
     List<Fornecedor> findByFiltersActive(@Param("nome") String nome, @Param("identificador") String identificador);
+
+    @Query("SELECT f FROM Fornecedor f WHERE REPLACE(f.identificador, '-', '') = :identificadorLimpo")
+    Optional<Fornecedor> findByIdentificadorLimpo(@Param("identificadorLimpo") String identificadorLimpo);
     
 }

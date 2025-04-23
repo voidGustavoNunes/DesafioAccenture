@@ -26,5 +26,8 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long>{
     
     @Query("SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END FROM Empresa e WHERE e.cnpj = :cnpj AND e.deleted = false")
     boolean existsByCnpjActive(@Param("cnpj") String cnpj);
+
+    @Query("SELECT e FROM Empresa e WHERE REPLACE(e.cnpj, '-', '') = :cnpjLimpo")
+    Optional<Empresa> findByCnpjLimpo(@Param("cnpjLimpo") String cnpjLimpo);
     
 }

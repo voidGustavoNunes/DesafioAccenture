@@ -111,9 +111,8 @@ export class EmpresaFormComponent implements OnInit {
         this.router.navigate(['/empresas']);
       },
       error: (err) => {
-        this.notificationService.error(
-          'Ocorreu um erro ao salvar a empresa'
-        );
+        const errorMessage = err.error?.message || 'Ocorreu um erro ao salvar a empresa';
+        this.notificationService.error(errorMessage);
       }
     });
   }

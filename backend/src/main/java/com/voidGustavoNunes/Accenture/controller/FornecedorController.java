@@ -34,6 +34,8 @@ public class FornecedorController extends GenericController<Fornecedor, Forneced
         fornecedor.setCep(dto.getCep());
         fornecedor.setIdentificador(dto.getIdentificador());
         fornecedor.setTipo(dto.getTipo());
+        fornecedor.setRg(dto.getRg());
+        fornecedor.setDataNascimento(dto.getDataNascimento());
         return fornecedor;
     }
 }

@@ -1,6 +1,7 @@
 package com.voidGustavoNunes.Accenture.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class EmpresaService extends GenericServiceImpl<Empresa, EmpresaRepositor
     public void saveValidation(Empresa entity) throws RegistroNotFoundException {
         cepService.validaCep(entity.getCep());
         validarCnpj(entity.getCnpj());
+        validarDuplicidade(entity);
     }
 
     private void validarCnpj(String cnpj) {
@@ -78,5 +80,15 @@ public class EmpresaService extends GenericServiceImpl<Empresa, EmpresaRepositor
         
         empresa.removeFornecedor(fornecedor);
         return repository.save(empresa);
+    }
+
+    private void validarDuplicidade(Empresa entity) {
+        String cnpjLimpo = entity.getCnpj().replaceAll("[^\\d]", "");
+        
+        Optional<Empresa> empresaExistente = repository.findByCnpjLimpo(cnpjLimpo);
+        
+        if (empresaExistente.isPresent() && !empresaExistente.get().getId().equals(entity.getId())) {
+            throw new IllegalArgumentException("Já existe uma empresa cadastrada com este CNPJ");
+        }
     }
 }

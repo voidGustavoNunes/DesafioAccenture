@@ -101,7 +101,6 @@ export class FornecedorListComponent implements OnInit {
       return;
     }
     fornecedor.editMode = true;
-    // Salva o estado original para possível cancelamento
     fornecedor.originalValue = {...fornecedor};
   }
 

@@ -40,6 +40,10 @@ public class FornecedorDTO {
         
     private List<EmpresaResumoDTO> empresas;
 
+    private String rg;
+    
+    private LocalDate dataNascimento;
+
 
     public FornecedorDTO(Fornecedor fornecedor) {
         this.id = fornecedor.getId();
@@ -48,6 +52,8 @@ public class FornecedorDTO {
         this.nome = fornecedor.getNome();
         this.email = fornecedor.getEmail();
         this.cep = fornecedor.getCep();
+        this.rg = fornecedor.getRg();
+        this.dataNascimento = fornecedor.getDataNascimento();
         this.empresas = fornecedor.getEmpresas() != null ? 
         fornecedor.getEmpresas().stream()
             .map(EmpresaResumoDTO::new)

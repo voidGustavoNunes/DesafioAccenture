@@ -54,6 +54,10 @@ public class Fornecedor extends GenericModel{
     
     @ManyToMany(mappedBy = "fornecedores")
     private Set<Empresa> empresas = new HashSet<>();
+
+    private String rg;
+    
+    private LocalDate dataNascimento;
     
     @Override
     public int hashCode() {
