@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class EmpresaService extends GenericService<Empresa, ID>{
 
-    protected override baseUrl = "http://localhost:8080/api/empresa";
+  protected override baseUrl = "/api/empresa";
 
     constructor(override httpClient: HttpClient) {
       super(httpClient);

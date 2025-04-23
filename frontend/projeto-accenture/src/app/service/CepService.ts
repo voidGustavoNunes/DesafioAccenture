@@ -8,7 +8,7 @@ import { Cep } from '../modules/Cep';
   providedIn: 'root'
 })
 export class CepService {
-  private apiUrl = 'http://localhost:8080/api/cep';
+  private apiUrl = '/api/cep';
 
   constructor(private http: HttpClient) { }
 

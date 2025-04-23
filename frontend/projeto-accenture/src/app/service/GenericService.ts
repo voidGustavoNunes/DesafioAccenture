@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 })
 export class GenericService<T, ID> {
 
-  protected baseUrl = "http://localhost:4200/";
+  protected baseUrl = "/api";
 
   constructor(protected httpClient: HttpClient) { }
 

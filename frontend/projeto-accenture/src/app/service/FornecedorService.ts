@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class FornecedorService extends GenericService<Fornecedor, ID>{
 
-  protected override baseUrl = "http://localhost:8080/api/fornecedor";
+  protected override baseUrl = "/api/fornecedor";
 
   constructor(override httpClient: HttpClient) {
     super(httpClient);
