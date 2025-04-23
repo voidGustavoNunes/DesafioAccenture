@@ -145,3 +145,5 @@ Sinta-se à vontade para abrir **issues** ou enviar **pull requests**.
 ### 🖼️ Tela 8
 ![Tela 8](frontend/projeto-accenture/src/assets/8.png)
 
+
+Obrigado a todos pela oportunidade!
