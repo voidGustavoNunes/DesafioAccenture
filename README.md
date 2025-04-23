@@ -122,26 +122,26 @@ Sinta-se à vontade para abrir **issues** ou enviar **pull requests**.
 ## 📸 Fotos do Projeto
 
 ### 🖼️ Tela 1
-![Tela 1](frontend/projeto-accenture/src/app/assets/1.png)
+![Tela 1](frontend/projeto-accenture/src/assets/1.png)
 
 ### 🖼️ Tela 2
-![Tela 2](frontend/projeto-accenture/src/app/assets/2.png)
+![Tela 2](frontend/projeto-accenture/src/assets/2.png)
 
 ### 🖼️ Tela 3
-![Tela 3](frontend/projeto-accenture/src/app/assets/3.png)
+![Tela 3](frontend/projeto-accenture/src/assets/3.png)
 
 ### 🖼️ Tela 4
-![Tela 4](frontend/projeto-accenture/src/app/assets/4.png)
+![Tela 4](frontend/projeto-accenture/src/assets/4.png)
 
 ### 🖼️ Tela 5
-![Tela 5](frontend/projeto-accenture/src/app/assets/5.png)
+![Tela 5](frontend/projeto-accenture/src/assets/5.png)
 
 ### 🖼️ Tela 6
-![Tela 6](frontend/projeto-accenture/src/app/assets/6.png)
+![Tela 6](frontend/projeto-accenture/src/assets/6.png)
 
 ### 🖼️ Tela 7
-![Tela 7](frontend/projeto-accenture/src/app/assets/7.png)
+![Tela 7](frontend/projeto-accenture/src/assets/7.png)
 
 ### 🖼️ Tela 8
-![Tela 8](frontend/projeto-accenture/src/app/assets/8.png)
+![Tela 8](frontend/projeto-accenture/src/assets/8.png)
 
