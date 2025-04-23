@@ -15,7 +15,7 @@ public interface FornecedorRepository extends JpaRepository<Fornecedor, Long>{
     @Query("SELECT f FROM Fornecedor f WHERE f.deleted = false")
     List<Fornecedor> findAllActive();
 
-    @Query("SELECT f FROM Fornecedor f WHERE REPLACE(f.identificador, '-', '') = :identificadorLimpo")
+    @Query("SELECT f FROM Fornecedor f WHERE " +
+    "REPLACE(REPLACE(REPLACE(REPLACE(f.identificador, '.', ''), '/', ''), '-', ''), ' ', '') = :identificadorLimpo")
     Optional<Fornecedor> findByIdentificadorLimpo(@Param("identificadorLimpo") String identificadorLimpo);
-    
 }

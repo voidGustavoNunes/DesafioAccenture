@@ -16,7 +16,7 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long>{
     @Query("SELECT e FROM Empresa e WHERE e.deleted = false")
     List<Empresa> findAllActive();
 
-    @Query("SELECT e FROM Empresa e WHERE REPLACE(e.cnpj, '-', '') = :cnpjLimpo")
-    Optional<Empresa> findByCnpjLimpo(@Param("cnpjLimpo") String cnpjLimpo);
+    @Query("SELECT e FROM Empresa e WHERE REPLACE(REPLACE(REPLACE(e.cnpj, '.', ''), '/', ''), '-', '') = ?1")
+    Optional<Empresa> findByCnpjLimpo(String cnpjLimpo);
     
 }
