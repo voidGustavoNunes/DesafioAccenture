@@ -7,6 +7,7 @@ import { EmpresaService } from 'src/app/service/EmpresaService';
 import { CEPValidator } from 'src/app/shared/validators/CepValidator';
 import { CNPJValidator } from 'src/app/shared/validators/CnpjValidator';
 import { NotificationService } from '../../../service/NotificationService';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-empresa-form',
@@ -24,11 +25,32 @@ export class EmpresaFormComponent implements OnInit {
     private fb: FormBuilder,
     private cepService: CepService,
     private empresaService: EmpresaService,
-    private notificationService: NotificationService // Ou seu serviço de mensagens
+    private notificationService: NotificationService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.initForm();
+    this.loadEmpresaIfEditing();
+  }
+
+  loadEmpresaIfEditing(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.loading = true;
+      this.empresaService.getEntity(+id).subscribe({
+        next: (empresa) => {
+          this.form.patchValue(empresa);
+          this.loading = false;
+        },
+        error: (err) => {
+          this.notificationService.error('Erro ao carregar empresa para edição');
+          this.router.navigate(['/empresas']);
+          this.loading = false;
+        }
+      });
+    }
   }
 
   initForm(): void {
@@ -66,7 +88,6 @@ export class EmpresaFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.invalid) {
-      // Marca todos os campos como touched para mostrar os erros
       Object.keys(this.form.controls).forEach(key => {
         this.form.get(key)?.markAsTouched();
       });
@@ -84,11 +105,10 @@ export class EmpresaFormComponent implements OnInit {
       finalize(() => this.loading = false)
     ).subscribe({
       next: () => {
-        this.notificationService.success(empresa.id ? 'Empresa atualizada com sucesso!' : 'Empresa criada com sucesso!');
-        // Limpa o formulário se for uma criação
-        if (!empresa.id) {
-          this.form.reset();
-        }
+        this.notificationService.success(
+          empresa.id ? 'Empresa atualizada com sucesso!' : 'Empresa criada com sucesso!'
+        );
+        this.router.navigate(['/empresas']);
       },
       error: (err) => {
         this.notificationService.error(

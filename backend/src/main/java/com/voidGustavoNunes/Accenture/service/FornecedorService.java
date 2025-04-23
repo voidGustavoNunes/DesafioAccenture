@@ -1,9 +1,13 @@
 package com.voidGustavoNunes.Accenture.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.voidGustavoNunes.Accenture.exception.RegistroNotFoundException;
+import com.voidGustavoNunes.Accenture.model.Empresa;
 import com.voidGustavoNunes.Accenture.model.Fornecedor;
 import com.voidGustavoNunes.Accenture.model.enums.TipoPessoa;
 import com.voidGustavoNunes.Accenture.repository.FornecedorRepository;
@@ -46,6 +50,17 @@ public class FornecedorService extends GenericServiceImpl<Fornecedor, Fornecedor
         } catch (InvalidStateException e) {
             throw new IllegalArgumentException((tipo == TipoPessoa.FISICA ? "CPF" : "CNPJ") + " inválido: " + identificador);
         }
+    }
+
+    @Override
+    public List<Fornecedor> listar() {
+        return repository.findAllActive().stream()
+            .peek(fornecedor -> {
+                if ((fornecedor.getEmpresas()) != null) {
+                    fornecedor.getEmpresas().size();
+                }
+            })
+            .collect(Collectors.toList());
     }
     
 }

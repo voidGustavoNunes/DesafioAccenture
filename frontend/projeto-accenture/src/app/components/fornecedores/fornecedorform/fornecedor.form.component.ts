@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 
 import { CepService } from 'src/app/service/CepService';
@@ -29,11 +30,14 @@ export class FornecedorFormComponent implements OnInit {
     private fb: FormBuilder,
     private cepService: CepService,
     private fornecedorService: FornecedorService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.initForm();
+    this.loadFornecedorIfEditing();
   }
 
   initForm(): void {
@@ -83,12 +87,35 @@ export class FornecedorFormComponent implements OnInit {
     dataNascimentoControl?.updateValueAndValidity();
   }
 
+  loadFornecedorIfEditing(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.loading = true;
+      this.fornecedorService.getEntity(+id).subscribe({
+        next: (fornecedor) => {
+          this.form.patchValue(fornecedor);
+          this.updateValidators(fornecedor.tipo);
+          this.loading = false;
+
+          if (fornecedor.cep) {
+            this.validateCep(fornecedor.cep);
+          }
+        },
+        error: (err) => {
+          this.notificationService.error('Erro ao carregar fornecedor para edição');
+          this.router.navigate(['/fornecedores']);
+          this.loading = false;
+        }
+      });
+    }
+  }
+
   validateCep(cep: string): void {
     this.validatingCep = true;
     this.cepService.validate(cep).subscribe({
       next: (result) => {
         this.validatingCep = false;
-        if (result) {
+        if (result && result.address) {
           this.cepInfo = result;
         } else {
           this.form.get('cep')?.setErrors({ invalidCep: true });
@@ -98,11 +125,10 @@ export class FornecedorFormComponent implements OnInit {
       error: () => {
         this.validatingCep = false;
         this.form.get('cep')?.setErrors({ invalidCep: true });
-        this.cepInfo = null;
+        this.cepInfo = null; 
       }
     });
   }
-
   onSubmit(): void {
     if (this.form.invalid) {
       Object.keys(this.form.controls).forEach(key => {
@@ -122,13 +148,11 @@ export class FornecedorFormComponent implements OnInit {
       finalize(() => this.loading = false)
     ).subscribe({
       next: () => {
-        this.notificationService.success(fornecedor.id ? 'Fornecedor atualizado!' : 'Fornecedor cadastrado!');
-        if (!fornecedor.id) {
-          this.form.reset({
-            tipo: this.tipoPessoa.JURIDICA
-          });
-          this.cepInfo = null;
-        }
+        this.notificationService.success(
+          fornecedor.id ? 'Fornecedor atualizado com sucesso!' : 'Fornecedor cadastrado com sucesso!'
+        );
+        // Redireciona para a lista de fornecedores após sucesso
+        this.router.navigate(['/fornecedores']);
       },
       error: (err) => {
         this.notificationService.error('Erro ao salvar fornecedor');

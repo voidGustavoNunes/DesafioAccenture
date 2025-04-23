@@ -1,6 +1,9 @@
 package com.voidGustavoNunes.Accenture.model.dto;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.voidGustavoNunes.Accenture.model.Fornecedor;
 import com.voidGustavoNunes.Accenture.model.enums.TipoPessoa;
@@ -34,10 +37,9 @@ public class FornecedorDTO {
     @NotBlank(message = "CEP é obrigatório")
     @Pattern(regexp = "\\d{8}", message = "O CEP deve conter 8 dígitos numéricos")
     private String cep;
-    
-    private String rg;
-    
-    private LocalDate dataNascimento;
+        
+    private List<EmpresaResumoDTO> empresas;
+
 
     public FornecedorDTO(Fornecedor fornecedor) {
         this.id = fornecedor.getId();
@@ -46,5 +48,10 @@ public class FornecedorDTO {
         this.nome = fornecedor.getNome();
         this.email = fornecedor.getEmail();
         this.cep = fornecedor.getCep();
+        this.empresas = fornecedor.getEmpresas() != null ? 
+        fornecedor.getEmpresas().stream()
+            .map(EmpresaResumoDTO::new)
+            .collect(Collectors.toList()) : 
+        Collections.emptyList();
     }
 }
