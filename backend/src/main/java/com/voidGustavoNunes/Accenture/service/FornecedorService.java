@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.voidGustavoNunes.Accenture.exception.RegistroNotFoundException;
-import com.voidGustavoNunes.Accenture.model.Empresa;
 import com.voidGustavoNunes.Accenture.model.Fornecedor;
 import com.voidGustavoNunes.Accenture.model.dto.CepDTO;
 import com.voidGustavoNunes.Accenture.model.enums.TipoPessoa;

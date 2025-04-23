@@ -1,193 +1,232 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="fornecedor-form">
-  <div class="mb-3">
-    <label class="form-label">Tipo de Pessoa*</label>
-    <div class="form-check">
-      <input
-        class="form-check-input"
-        type="radio"
-        formControlName="tipo"
-        [value]="tipoPessoa.JURIDICA"
-        id="tipoPJ"
-      />
-      <label class="form-check-label" for="tipoPJ"> Pessoa JURIDICA </label>
-    </div>
-    <div class="form-check">
-      <input
-        class="form-check-input"
-        type="radio"
-        formControlName="tipo"
-        [value]="tipoPessoa.FISICA"
-        id="tipoPF"
-      />
-      <label class="form-check-label" for="tipoPF"> Pessoa FISICA </label>
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <label for="identificador" class="form-label">
-      {{ form.get("tipo")?.value === tipoPessoa.FISICA ? "CPF" : "CNPJ" }}*
-    </label>
-    <input
-      type="text"
-      id="identificador"
-      formControlName="identificador"
-      class="form-control"
-      [placeholder]="
-        form.get('tipo')?.value === tipoPessoa.FISICA
-          ? '000.000.000-00'
-          : '00.000.000/0000-00'
-      "
-      [appCpfMask]="form.get('tipo')?.value === tipoPessoa.FISICA"
-      [appCnpjMask]="form.get('tipo')?.value === tipoPessoa.JURIDICA"
-    />
-    <div
-      *ngIf="
-        form.get('identificador')?.invalid && form.get('identificador')?.touched
-      "
-      class="text-danger"
-    >
-      <span *ngIf="form.get('identificador')?.errors?.['required']"
-        >Este campo é obrigatório</span
-      >
-      <span *ngIf="form.get('identificador')?.errors?.['invalidCpf']"
-        >CPF inválido</span
-      >
-      <span *ngIf="form.get('identificador')?.errors?.['invalidCnpj']"
-        >CNPJ inválido</span
-      >
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <label for="nome" class="form-label">Nome*</label>
-    <input
-      type="text"
-      id="nome"
-      formControlName="nome"
-      class="form-control"
-      placeholder="Nome completo ou razão social"
-    />
-    <div
-      *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched"
-      class="text-danger"
-    >
-      <span *ngIf="form.get('nome')?.errors?.['required']"
-        >Nome é obrigatório</span
-      >
-      <span *ngIf="form.get('nome')?.errors?.['minlength']"
-        >Nome deve ter pelo menos 3 caracteres</span
-      >
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <label for="email" class="form-label">E-mail*</label>
-    <input
-      type="email"
-      id="email"
-      formControlName="email"
-      class="form-control"
-      placeholder="exemplo@email.com"
-    />
-    <div
-      *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
-      class="text-danger"
-    >
-      <span *ngIf="form.get('email')?.errors?.['required']"
-        >E-mail é obrigatório</span
-      >
-      <span *ngIf="form.get('email')?.errors?.['email']">E-mail inválido</span>
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <label for="cep" class="form-label">CEP*</label>
-    <div class="input-group">
-      <input
-        type="text"
-        id="cep"
-        formControlName="cep"
-        class="form-control"
-        placeholder="00000-000"
-        appCepMask
-      />
-      <span *ngIf="validatingCep" class="input-group-text">
-        <i class="fas fa-spinner fa-spin"></i>
-      </span>
-    </div>
-    <div
-      *ngIf="form.get('cep')?.invalid && form.get('cep')?.touched"
-      class="text-danger"
-    >
-      <span *ngIf="form.get('cep')?.errors?.['required']"
-        >CEP é obrigatório</span
-      >
-      <span *ngIf="form.get('cep')?.errors?.['invalidCep']">CEP inválido</span>
-      <span *ngIf="form.get('cep')?.errors?.['pattern']"
-        >CEP deve conter 8 dígitos</span
-      >
-    </div>
-
-    <div *ngIf="cepInfo" class="mt-2 small text-muted">
-      {{ cepInfo.address }}, {{ cepInfo.district }}, {{ cepInfo.city }} -
-      {{ cepInfo.state }}
-    </div>
-  </div>
-
-  <!-- Campos exclusivos para Pessoa FISICA -->
-  <ng-container *ngIf="form.get('tipo')?.value === tipoPessoa.FISICA">
-    <div class="mb-3">
-      <label for="rg" class="form-label">RG*</label>
-      <input
-        type="text"
-        id="rg"
-        formControlName="rg"
-        class="form-control"
-        placeholder="00.000.000-0"
-      />
-      <div
-        *ngIf="form.get('rg')?.invalid && form.get('rg')?.touched"
-        class="text-danger"
-      >
-        <span *ngIf="form.get('rg')?.errors?.['required']"
-          >RG é obrigatório para pessoa FISICA</span
+<div class="card shadow-sm">
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="fornecedor-form">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-4">
+          <i class="fas fa-truck me-1"></i>
+          {{
+            form.get("id")?.value ? "Editar Fornecedor" : "Cadastrar Fornecedor"
+          }}
+        </h2>
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-secondary"
+          routerLink="/fornecedores"
         >
+          <i class="fas fa-arrow-left me-1"></i> Voltar
+        </button>
       </div>
-    </div>
-
-    <div class="mb-3">
-      <label for="dataNascimento" class="form-label">Data de Nascimento*</label>
-      <input
-        type="date"
-        id="dataNascimento"
-        formControlName="dataNascimento"
-        class="form-control"
-      />
-      <div
-        *ngIf="
-          form.get('dataNascimento')?.invalid &&
-          form.get('dataNascimento')?.touched
-        "
-        class="text-danger"
-      >
-        <span *ngIf="form.get('dataNascimento')?.errors?.['required']"
-          >Data de nascimento é obrigatória para pessoa física</span
-        >
-        <span *ngIf="form.get('dataNascimento')?.errors?.['menorIdadeParana']"
-          >Não é permitido cadastrar fornecedor pessoa física menor de idade no Paraná</span
-        >
+      <div class="mb-3">
+        <label class="form-label">Tipo de Pessoa*</label>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="tipo"
+            [value]="tipoPessoa.JURIDICA"
+            id="tipoPJ"
+          />
+          <label class="form-check-label" for="tipoPJ"> Pessoa JURIDICA </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="tipo"
+            [value]="tipoPessoa.FISICA"
+            id="tipoPF"
+          />
+          <label class="form-check-label" for="tipoPF"> Pessoa FISICA </label>
+        </div>
       </div>
-    </div>
-  </ng-container>
 
-  <div class="d-flex justify-content-end">
-    <button type="button" class="btn btn-secondary me-2" (click)="form.reset({ tipo: tipoPessoa.JURIDICA })">
-      Limpar
-    </button>
-    <button type="submit" class="btn btn-primary" [disabled]="loading || form.invalid">
-      <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-      {{ form.get('id')?.value ? 'Atualizar' : 'Cadastrar' }}
-    </button>
+      <div class="mb-3">
+        <label for="identificador" class="form-label">
+          {{ form.get("tipo")?.value === tipoPessoa.FISICA ? "CPF" : "CNPJ" }}*
+        </label>
+        <input
+          type="text"
+          id="identificador"
+          formControlName="identificador"
+          class="form-control"
+          [placeholder]="
+            form.get('tipo')?.value === tipoPessoa.FISICA
+              ? '000.000.000-00'
+              : '00.000.000/0000-00'
+          "
+          [appCpfMask]="form.get('tipo')?.value === tipoPessoa.FISICA"
+          [appCnpjMask]="form.get('tipo')?.value === tipoPessoa.JURIDICA"
+        />
+        <div
+          *ngIf="
+            form.get('identificador')?.invalid &&
+            form.get('identificador')?.touched
+          "
+          class="text-danger"
+        >
+          <span *ngIf="form.get('identificador')?.errors?.['required']"
+            >Este campo é obrigatório</span
+          >
+          <span *ngIf="form.get('identificador')?.errors?.['invalidCpf']"
+            >CPF inválido</span
+          >
+          <span *ngIf="form.get('identificador')?.errors?.['invalidCnpj']"
+            >CNPJ inválido</span
+          >
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="nome" class="form-label">Nome*</label>
+        <input
+          type="text"
+          id="nome"
+          formControlName="nome"
+          class="form-control"
+          placeholder="Nome completo ou razão social"
+        />
+        <div
+          *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched"
+          class="text-danger"
+        >
+          <span *ngIf="form.get('nome')?.errors?.['required']"
+            >Nome é obrigatório</span
+          >
+          <span *ngIf="form.get('nome')?.errors?.['minlength']"
+            >Nome deve ter pelo menos 3 caracteres</span
+          >
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">E-mail*</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          placeholder="exemplo@email.com"
+        />
+        <div
+          *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+          class="text-danger"
+        >
+          <span *ngIf="form.get('email')?.errors?.['required']"
+            >E-mail é obrigatório</span
+          >
+          <span *ngIf="form.get('email')?.errors?.['email']"
+            >E-mail inválido</span
+          >
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="cep" class="form-label">CEP*</label>
+        <div class="input-group">
+          <input
+            type="text"
+            id="cep"
+            formControlName="cep"
+            class="form-control"
+            placeholder="00000-000"
+            appCepMask
+          />
+          <span *ngIf="validatingCep" class="input-group-text">
+            <i class="fas fa-spinner fa-spin"></i>
+          </span>
+        </div>
+        <div
+          *ngIf="form.get('cep')?.invalid && form.get('cep')?.touched"
+          class="text-danger"
+        >
+          <span *ngIf="form.get('cep')?.errors?.['required']"
+            >CEP é obrigatório</span
+          >
+          <span *ngIf="form.get('cep')?.errors?.['invalidCep']"
+            >CEP inválido</span
+          >
+          <span *ngIf="form.get('cep')?.errors?.['pattern']"
+            >CEP deve conter 8 dígitos</span
+          >
+        </div>
+
+        <div *ngIf="cepInfo" class="mt-2 small text-muted">
+          {{ cepInfo.address }}, {{ cepInfo.district }}, {{ cepInfo.city }} -
+          {{ cepInfo.state }}
+        </div>
+      </div>
+
+      <ng-container *ngIf="form.get('tipo')?.value === tipoPessoa.FISICA">
+        <div class="mb-3">
+          <label for="rg" class="form-label">RG*</label>
+          <input
+            type="text"
+            id="rg"
+            formControlName="rg"
+            class="form-control"
+            placeholder="00.000.000-0"
+          />
+          <div
+            *ngIf="form.get('rg')?.invalid && form.get('rg')?.touched"
+            class="text-danger"
+          >
+            <span *ngIf="form.get('rg')?.errors?.['required']"
+              >RG é obrigatório para pessoa FISICA</span
+            >
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="dataNascimento" class="form-label"
+            >Data de Nascimento*</label
+          >
+          <input
+            type="date"
+            id="dataNascimento"
+            formControlName="dataNascimento"
+            class="form-control"
+          />
+          <div
+            *ngIf="
+              form.get('dataNascimento')?.invalid &&
+              form.get('dataNascimento')?.touched
+            "
+            class="text-danger"
+          >
+            <span *ngIf="form.get('dataNascimento')?.errors?.['required']"
+              >Data de nascimento é obrigatória para pessoa física</span
+            >
+            <span
+              *ngIf="form.get('dataNascimento')?.errors?.['menorIdadeParana']"
+              >Não é permitido cadastrar fornecedor pessoa física menor de idade
+              no Paraná</span
+            >
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="d-flex justify-content-between mt-4">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="form.reset({ tipo: tipoPessoa.JURIDICA })"
+        >
+          <i class="fas fa-undo me-1"></i> Limpar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary px-4"
+          [disabled]="loading || form.invalid"
+        >
+          <span
+            *ngIf="loading"
+            class="spinner-border spinner-border-sm me-1"
+          ></span>
+          <i class="fas fa-save me-1" *ngIf="!loading"></i>
+          {{ form.get("id")?.value ? "Atualizar" : "Cadastrar" }}
+        </button>
+      </div>
+    </form>
   </div>
-
-</form>
+</div>

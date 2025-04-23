@@ -29,7 +29,6 @@
       </thead>
       <tbody>
         <ng-container *ngFor="let empresa of empresas; let i = index">
-          <!-- Modo de visualização -->
           <tr *ngIf="!empresa.editMode">
             <td>{{ empresa.cnpj }}</td>
             <td>{{ empresa.nomeFantasia }}</td>
@@ -50,7 +49,6 @@
             </td>
           </tr>
 
-          <!-- Modo de edição -->
           <tr *ngIf="empresa.editMode">
             <td>
               <input type="text" [(ngModel)]="empresa.cnpj" class="form-control form-control-sm" [appCnpjMask]="true"/>

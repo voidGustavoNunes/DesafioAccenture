@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./boas-vindas.component.scss']
 })
 export class BoasVindasComponent {
-  currentDate = new Date(2025, 3, 22);
+  currentDate = new Date(2025, 3, 23);
 }

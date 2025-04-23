@@ -11,10 +11,10 @@ import { BoasVindasComponent } from './components/boas-vindas/boas-vindas.compon
 import { CepMaskDirective } from './components/directives/cep-mask.directive';
 import { CnpjMaskDirective } from './components/directives/cnpj-mask.directive';
 import { CpfMaskDirective } from './components/directives/cpf-mask.directive';
-import { EmpresaDetailComponent } from './components/empresas/empresadetail/empresa.detail.component';
+import { EmpresaDetailComponent } from './components/empresas/empresa.detail/empresa.detail.component';
 import { EmpresaFormComponent } from './components/empresas/empresaform/empresa.form.component';
 import { EmpresaListComponent } from './components/empresas/empresalist/empresa.list.component';
-import { FornecedorDetailComponent } from './components/fornecedores/fornecedordetail/fornecedor.detail.component';
+import { FornecedorDetailComponent } from './components/fornecedores/fornecedor.detail/fornecedor.detail.component';
 import { FornecedorFormComponent } from './components/fornecedores/fornecedorform/fornecedor.form.component';
 import { FornecedorListComponent } from './components/fornecedores/fornecedorlist/fornecedor.list.component';
 import { LoadingComponent } from './shared/loading/loading.component';
@@ -26,19 +26,15 @@ import { ToastModule } from 'primeng/toast';
 
 const routes : Routes = [
   { path: '', component: BoasVindasComponent },
-
-  // Rotas de Empresa
   { path: 'empresas', component: EmpresaListComponent },
   { path: 'empresas/novo', component: EmpresaFormComponent },
   { path: 'empresas/:id', component: EmpresaDetailComponent },
   { path: 'empresas/:id/editar', component: EmpresaFormComponent },
-
   { path: 'fornecedores', component: FornecedorListComponent },
   { path: 'fornecedores/novo', component: FornecedorFormComponent },
   { path: 'fornecedores/:id', component: FornecedorDetailComponent },
   { path: 'fornecedores/:id/editar', component: FornecedorFormComponent },
   { path: 'home', component: EmpresaListComponent },
-
   { path: '**', component: BoasVindasComponent },
 ];
 
@@ -69,6 +65,7 @@ const routes : Routes = [
     BrowserAnimationsModule,
     CommonModule,
     ToastModule,
+
   ],
   providers: [
     MessageService,

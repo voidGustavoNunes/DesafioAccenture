@@ -21,7 +21,7 @@ export class EmpresaListComponent implements OnInit {
   ngOnInit(): void {
     this.loadEmpresas();
   }
-  
+
 
   loadEmpresas(): void {
     this.loading = true;
@@ -47,7 +47,6 @@ export class EmpresaListComponent implements OnInit {
   }
 
   cancelEdit(empresa: Empresa & { editMode?: boolean }, index: number): void {
-    // Restaura os dados originais
     const original = this.originalEmpresas[index];
     empresa.cnpj = original.cnpj;
     empresa.nomeFantasia = original.nomeFantasia;

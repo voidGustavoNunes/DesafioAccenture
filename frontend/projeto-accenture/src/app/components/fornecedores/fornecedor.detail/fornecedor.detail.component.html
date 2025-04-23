@@ -21,7 +21,6 @@
       </div>
     </div>
 
-    <!-- Tabs -->
     <ul class="nav nav-tabs mb-4">
       <li class="nav-item">
         <a class="nav-link" [class.active]="activeTab === 'info'" (click)="setActiveTab('info')">
@@ -35,9 +34,7 @@
       </li>
     </ul>
 
-    <!-- Conteúdo das Tabs -->
     <div [ngSwitch]="activeTab">
-      <!-- Tab Informações -->
       <div *ngSwitchCase="'info'">
         <div class="card">
           <div class="card-header">
@@ -65,7 +62,6 @@
               <div class="col-md-9">{{ fornecedor.cep }}</div>
             </div>
 
-            <!-- Campos específicos para pessoa física -->
             <ng-container *ngIf="fornecedor.tipo === tipoPessoa.FISICA">
               <div class="row mb-3">
                 <div class="col-md-3 fw-bold">RG:</div>
@@ -85,7 +81,6 @@
         </div>
       </div>
 
-      <!-- Tab Empresas -->
       <div *ngSwitchCase="'empresas'">
         <div class="card">
           <div class="card-header">

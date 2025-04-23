@@ -12,6 +12,7 @@ import com.voidGustavoNunes.Accenture.model.Empresa;
 import com.voidGustavoNunes.Accenture.model.dto.EmpresaDTO;
 import com.voidGustavoNunes.Accenture.service.EmpresaService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 @Validated
 @RestController
@@ -48,11 +49,13 @@ public class EmpresaController extends GenericController<Empresa, EmpresaDTO> {
         return empresa;
     }
 
+    @Operation(summary = "Criar", description = "Método que gera cria uma fornecedor e persiste no banco")
     @PostMapping("/{empresaId}/fornecedores/{fornecedorId}")
     public EmpresaDTO associarFornecedor(@PathVariable Long empresaId, @PathVariable Long fornecedorId) {
         return toDTO(empresaService.associarFornecedor(empresaId, fornecedorId));
     }
     
+    @Operation(summary = "Excluir", description = "Método que exclui um dto de fornecedor")
     @DeleteMapping("/{empresaId}/fornecedores/{fornecedorId}")
     public EmpresaDTO removerFornecedor(@PathVariable Long empresaId, @PathVariable Long fornecedorId) {
         return toDTO(empresaService.removerFornecedor(empresaId, fornecedorId));

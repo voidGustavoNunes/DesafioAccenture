@@ -1,40 +1,61 @@
 <!-- app.component.html -->
 <div class="d-flex flex-column min-vh-100">
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg" style="background-color: #A100FF;">
-    <div class="container d-flex align-items-center">
-      <a class="navbar-brand d-flex align-items-center gap-2 text-white" routerLink="/">
-        <img src="./././assets/accenturelogo.png" alt="Accenture Logo" height="32" />
-        <span style="font-weight: 700;">Gestão de Empresas e Fornecedores</span>
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #A100FF;">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" routerLink="/">
+        <img src="./././assets/accenturelogo.png" alt="Accenture Logo" height="32" class="me-2">
+        <span class="fw-bold">Gestão de Empresas e Fornecedores</span>
       </a>
-      <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+              aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
+
+      <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link text-white" routerLink="/">Início</a>
+            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+              <i class="fas fa-home me-1"></i> Início
+            </a>
           </li>
 
-          <!-- Empresas -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-white" href="#" id="empresasDropdown" role="button" data-bs-toggle="dropdown">
-              Empresas
+            <a class="nav-link dropdown-toggle" href="#" id="empresasDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-building me-1"></i> Empresas
             </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" routerLink="/empresas/novo">Cadastro</a></li>
-              <li><a class="dropdown-item" routerLink="/empresas">Listagem</a></li>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="empresasDropdown">
+              <li>
+                <a class="dropdown-item d-flex align-items-center" routerLink="/empresas/novo">
+                  <i class="fas fa-plus-circle text-primary me-2"></i> Cadastrar
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" routerLink="/empresas">
+                  <i class="fas fa-list text-primary me-2"></i> Listar
+                </a>
+              </li>
             </ul>
           </li>
 
-          <!-- Fornecedores -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-white" href="#" id="fornecedoresDropdown" role="button" data-bs-toggle="dropdown">
-              Fornecedores
+            <a class="nav-link dropdown-toggle" href="#" id="fornecedoresDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-truck me-1"></i> Fornecedores
             </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" routerLink="/fornecedores/novo">Cadastro</a></li>
-              <li><a class="dropdown-item" routerLink="/fornecedores">Listagem</a></li>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="fornecedoresDropdown">
+              <li>
+                <a class="dropdown-item d-flex align-items-center" routerLink="/fornecedores/novo">
+                  <i class="fas fa-plus-circle text-primary me-2"></i> Cadastrar
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" routerLink="/fornecedores">
+                  <i class="fas fa-list text-success me-2"></i> Listar
+                </a>
+              </li>
             </ul>
           </li>
         </ul>
@@ -42,17 +63,14 @@
     </div>
   </nav>
 
-  <!-- Conteúdo principal -->
   <div class="container flex-grow-1 my-4">
     <app-notification></app-notification>
     <router-outlet></router-outlet>
   </div>
 
-  <!-- Footer -->
   <footer class="py-4 mt-auto" style="background-color: #000000;">
     <div class="container">
       <div class="row">
-        <!-- Coluna 1 - Sobre o sistema -->
         <div class="col-lg-4 mb-4 mb-lg-0">
           <div class="d-flex align-items-center mb-3">
             <img src="./././assets/accenturelogo.png" alt="Accenture Logo" height="32" class="me-2">
@@ -61,7 +79,6 @@
           <p class="small text-light">Sistema completo para gestão de relacionamentos entre empresas e fornecedores.</p>
         </div>
 
-        <!-- Coluna 2 - Links úteis -->
         <div class="col-lg-4 mb-4 mb-lg-0">
           <h6 class="mb-3" style="color: #A100FF;">Links Rápidos</h6>
           <ul class="list-unstyled">
@@ -77,16 +94,9 @@
                 Listagem de Fornecedores
               </a>
             </li>
-            <li class="mb-2">
-              <a routerLink="/associacao" class="text-light text-decoration-none d-flex align-items-center">
-                <i class="fas fa-chevron-right me-2 small" style="color: #A100FF;"></i>
-                Associações
-              </a>
-            </li>
           </ul>
         </div>
 
-        <!-- Coluna 3 - Contato e redes sociais -->
         <div class="col-lg-4">
           <h6 class="mb-3" style="color: #A100FF;">Contato & Redes</h6>
           <div class="mb-3">
@@ -111,7 +121,6 @@
         </div>
       </div>
 
-      <!-- Rodapé inferior -->
       <div class="row mt-4 pt-3 border-top border-secondary">
         <div class="col-md-6 text-center text-md-start">
           <p class="small mb-0 text-white">

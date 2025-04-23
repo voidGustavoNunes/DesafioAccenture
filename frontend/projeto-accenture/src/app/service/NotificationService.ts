@@ -14,7 +14,6 @@ export class NotificationService {
   private _notificationSubject = new BehaviorSubject<Notification | null>(null);
   public notification$ = this._notificationSubject.asObservable();
 
-  // Adicione este método público para limpar notificações
   clearNotification(): void {
     this._notificationSubject.next(null);
   }

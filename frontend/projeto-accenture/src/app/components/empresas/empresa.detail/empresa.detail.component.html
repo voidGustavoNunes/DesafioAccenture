@@ -35,9 +35,7 @@
       </li>
     </ul>
 
-    <!-- Conteúdo das Tabs -->
     <div [ngSwitch]="activeTab">
-      <!-- Tab Informações -->
       <div *ngSwitchCase="'info'">
         <div class="card">
           <div class="card-header">
@@ -64,7 +62,6 @@
         </div>
       </div>
 
-      <!-- Tab Fornecedores -->
       <div *ngSwitchCase="'fornecedores'">
         <app-associacao [empresa]="empresa"></app-associacao>
       </div>

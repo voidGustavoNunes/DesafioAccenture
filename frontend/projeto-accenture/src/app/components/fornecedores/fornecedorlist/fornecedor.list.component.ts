@@ -132,7 +132,6 @@ export class FornecedorListComponent implements OnInit {
         this.notificationService.error('Erro ao atualizar fornecedor');
         this.loadingService.hide();
         console.error(err);
-        // Reverte para os valores originais em caso de erro
         const originalIndex = this.fornecedores.findIndex(f => f.id === fornecedor.id);
         if (originalIndex !== -1 && this.fornecedores[originalIndex].originalValue) {
           Object.assign(this.fornecedores[originalIndex], this.fornecedores[originalIndex].originalValue);
